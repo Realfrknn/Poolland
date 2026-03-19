@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poolland Yapı Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Safari / iOS global reset — butonları ve linkleri tarayıcı stilinden kurtarır */
+*{-webkit-tap-highlight-color:transparent}
+a,button,input,select,textarea{-webkit-appearance:none;appearance:none}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+</style>
+<style>
+:root {
+  --orange:#FF6B00;--orange-light:#FF8C00;--orange-dim:rgba(255,107,0,0.12);
+  --black:#0A0A0A;--dark:#141414;--dark2:#1E1E1E;--dark3:#2A2A2A;
+  --gray:#888;--gray-light:#CCC;--white:#F5F5F0;
+  --font-display:'Barlow Condensed',sans-serif;--font-body:'Barlow',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--black);color:var(--white);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:3px}
+
+/* NAVBAR */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #222;padding:0 2rem;height:68px;display:flex;align-items:center;gap:2rem}
+.nav-logo{font-family:var(–font-display);font-size:1.8rem;font-weight:900;color:var(–white);letter-spacing:-1px;text-transform:uppercase;flex-shrink:0;cursor:pointer}
+.nav-logo span{color:var(–orange)}
+.nav-search{flex:1;max-width:520px;display:flex;align-items:center;background:var(–dark2);border:1px solid #333;border-radius:6px;overflow:hidden;transition:border-color .2s}
+.nav-search:focus-within{border-color:var(–orange)}
+.nav-search input{flex:1;padding:.6rem 1rem;background:none;border:none;outline:none;color:var(–white);font-family:var(–font-body);font-size:.9rem}
+.nav-search input::placeholder{color:var(–gray)}
+.nav-search button{padding:.6rem 1rem;background:var(–orange);border:none;cursor:pointer;color:var(–black);font-size:1rem}
+.nav-links{display:flex;align-items:center;gap:1.5rem;margin-left:auto;flex-shrink:0}
+.nav-links a{color:var(–gray-light);text-decoration:none;font-size:.88rem;font-weight:500;transition:color .2s;cursor:pointer}
+.nav-links a:hover{color:var(–orange)}
+.nav-cart{position:relative;background:var(–orange);color:var(–black);border:none;border-radius:6px;padding:.5rem 1rem;font-family:var(–font-body);font-size:.88rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:background .2s}
+.nav-cart:hover{background:var(–orange-light)}
+.cart-badge{position:absolute;top:-6px;right:-6px;background:var(–white);color:var(–black);border-radius:50%;width:18px;height:18px;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* PAGE & SECTIONS */
+.page{padding-top:68px}
+section{display:none}
+section.active{display:block}
+
+/* HERO */
+.hero{position:relative;min-height:520px;display:flex;align-items:center;overflow:hidden;background:var(–dark)}
+.hero-bg{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 60px,rgba(255,107,0,0.03) 60px,rgba(255,107,0,0.03) 61px),repeating-linear-gradient(-45deg,transparent,transparent 60px,rgba(255,107,0,0.03) 60px,rgba(255,107,0,0.03) 61px)}
+.hero-accent{position:absolute;right:-80px;top:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,0,0.18) 0%,transparent 70%)}
+.hero-content{position:relative;z-index:1;padding:4rem 2rem;max-width:680px}
+.hero-badge{display:inline-block;background:var(–orange-dim);border:1px solid rgba(255,107,0,0.4);color:var(–orange);font-family:var(–font-display);font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.3rem .8rem;border-radius:2px;margin-bottom:1.2rem}
+.hero h1{font-family:var(–font-display);font-size:clamp(3rem,7vw,5.5rem);font-weight:900;line-height:.95;text-transform:uppercase;letter-spacing:-2px;margin-bottom:1.2rem}
+.hero h1 em{color:var(–orange);font-style:normal}
+.hero p{font-size:1.05rem;color:var(–gray-light);line-height:1.6;margin-bottom:2rem;max-width:480px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{background:var(–orange);color:var(–black);border:none;border-radius:6px;padding:.85rem 2rem;font-family:var(–font-display);font-size:1.1rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s}
+.btn-primary:hover{background:var(–orange-light);transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:var(–white);border:1px solid #444;border-radius:6px;padding:.85rem 2rem;font-family:var(–font-display);font-size:1.1rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-secondary:hover{border-color:var(–orange);color:var(–orange)}
+.hero-stats{position:absolute;right:2rem;bottom:2rem;display:flex;gap:2rem}
+.stat{text-align:center}
+.stat-num{font-family:var(–font-display);font-size:2.2rem;font-weight:900;color:var(–orange);line-height:1}
+.stat-lbl{font-size:.75rem;color:var(–gray);text-transform:uppercase;letter-spacing:1px;margin-top:.2rem}
+
+/* SEC HEADER */
+.sec-header{padding:3rem 2rem 1.5rem;display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1px solid #1e1e1e}
+.sec-title{font-family:var(–font-display);font-size:2rem;font-weight:900;text-transform:uppercase;letter-spacing:-1px}
+.sec-title span{color:var(–orange)}
+.sec-link{color:var(–orange);text-decoration:none;font-size:.88rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer}
+
+/* CATEGORIES */
+.cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;padding:1.5rem 2rem}
+.cat-card{background:var(–dark2);border:1px solid #2a2a2a;border-radius:10px;padding:1.5rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,transform .2s}
+.cat-card:hover{border-color:var(–orange);transform:translateY(-3px)}
+.cat-icon{font-size:2.2rem;margin-bottom:.6rem;display:block}
+.cat-name{font-family:var(–font-display);font-size:1rem;font-weight:700;text-transform:uppercase}
+.cat-count{font-size:.75rem;color:var(–gray);margin-top:.2rem}
+
+/* PRODUCT CARDS */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;padding:1.5rem 2rem 3rem}
+.product-card{background:var(–dark2);border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s;position:relative}
+.product-card:hover{border-color:var(–orange);transform:translateY(-4px)}
+.product-img{width:100%;aspect-ratio:1;background:var(–dark3);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.product-img-overlay{position:absolute;inset:0;background:rgba(255,107,0,0.08);opacity:0;transition:opacity .2s}
+.product-card:hover .product-img-overlay{opacity:1}
+.product-badge{position:absolute;top:10px;left:10px;background:var(–orange);color:var(–black);font-size:.7rem;font-weight:700;padding:.2rem .5rem;border-radius:3px;text-transform:uppercase;z-index:1}
+.badge-low{background:#e74c3c;color:white}
+.badge-new{background:#27ae60;color:white}
+.product-info{padding:1rem}
+.product-brand{font-size:.72rem;color:var(–orange);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.product-name{font-family:var(–font-display);font-size:1.05rem;font-weight:700;margin:.3rem 0;line-height:1.2}
+.product-specs{font-size:.78rem;color:var(–gray);margin-bottom:.8rem;line-height:1.5}
+.product-bottom{display:flex;align-items:center;justify-content:space-between}
+.product-price{font-family:var(–font-display);font-size:1.4rem;font-weight:900;color:var(–orange)}
+.product-old-price{font-size:.78rem;color:var(–gray);text-decoration:line-through}
+.btn-add{background:var(–orange);color:var(–black);border:none;border-radius:6px;width:36px;height:36px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .15s;flex-shrink:0}
+.btn-add:hover{background:var(–orange-light);transform:scale(1.1)}
+.stock-indicator{display:flex;align-items:center;gap:.4rem;font-size:.72rem;margin-bottom:.6rem}
+.stock-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.stock-in{background:#27ae60}.stock-low{background:#e67e22}.stock-out{background:#e74c3c}
+
+/* CAT PAGE */
+.cat-header{background:var(–dark);border-bottom:1px solid #1e1e1e;padding:2rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.back-btn{background:var(–dark2);border:1px solid #333;color:var(–white);border-radius:6px;padding:.5rem 1rem;font-family:var(–font-body);font-size:.88rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:border-color .2s}
+.back-btn:hover{border-color:var(–orange);color:var(–orange)}
+.cat-filters{padding:1rem 2rem;display:flex;gap:.8rem;flex-wrap:wrap;border-bottom:1px solid #1e1e1e}
+.filter-btn{background:var(–dark2);border:1px solid #333;color:var(–gray-light);border-radius:20px;padding:.4rem .9rem;font-size:.82rem;font-weight:500;cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:var(–orange);border-color:var(–orange);color:var(–black);font-weight:700}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:80px 1rem 2rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{background:var(–dark);border:1px solid #2a2a2a;border-radius:16px;width:100%;max-width:980px;overflow:hidden;animation:modalIn .25s ease}
+@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.modal-close{position:absolute;top:88px;right:1.5rem;z-index:2100;background:var(–dark3);border:1px solid #333;color:var(–white);border-radius:50%;width:40px;height:40px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:var(–orange);border-color:var(–orange);color:var(–black)}
+.modal-body{display:grid;grid-template-columns:1fr 1fr}
+.modal-gallery{padding:2rem;background:var(–dark2);display:flex;flex-direction:column;gap:1rem}
+.modal-main-img{aspect-ratio:1;background:var(–dark3);border-radius:10px;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:8rem;overflow:hidden}
+.modal-main-img img{width:100%;height:100%;object-fit:cover}
+.modal-thumbs{display:flex;gap:.6rem;flex-wrap:wrap}
+.modal-thumb{width:60px;height:60px;background:var(–dark3);border:2px solid #333;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;transition:border-color .2s;overflow:hidden}
+.modal-thumb img{width:100%;height:100%;object-fit:cover}
+.modal-thumb.active,.modal-thumb:hover{border-color:var(–orange)}
+.modal-info{padding:2rem;overflow-y:auto;max-height:80vh}
+.modal-brand{color:var(–orange);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:2px}
+.modal-name{font-family:var(–font-display);font-size:2rem;font-weight:900;line-height:1.1;margin:.5rem 0 1rem;text-transform:uppercase}
+.modal-price-row{display:flex;align-items:flex-end;gap:1rem;margin-bottom:1.2rem}
+.modal-price{font-family:var(–font-display);font-size:2.8rem;font-weight:900;color:var(–orange);line-height:1}
+.modal-old-price{font-size:1rem;color:var(–gray);text-decoration:line-through;margin-bottom:.2rem}
+.modal-discount{background:#e74c3c;color:white;font-size:.8rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;margin-bottom:.4rem}
+.modal-stock{display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;font-size:.88rem}
+.qty-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.qty-label{font-size:.85rem;color:var(–gray);font-weight:500}
+.qty-ctrl{display:flex;align-items:center;background:var(–dark2);border:1px solid #333;border-radius:8px;overflow:hidden}
+.qty-btn{width:36px;height:36px;background:none;border:none;color:var(–white);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.qty-btn:hover{background:var(–orange-dim);color:var(–orange)}
+.qty-val{padding:0 1rem;font-weight:700;min-width:36px;text-align:center}
+.modal-actions{display:flex;gap:.8rem;margin-bottom:1.5rem}
+.btn-cart-full{flex:1;background:var(–orange);color:var(–black);border:none;border-radius:8px;padding:1rem;font-family:var(–font-display);font-size:1.1rem;font-weight:700;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.btn-cart-full:hover{background:var(–orange-light)}
+.btn-fav{background:var(–dark2);color:var(–white);border:1px solid #333;border-radius:8px;padding:1rem 1.2rem;font-size:1.2rem;cursor:pointer;transition:all .2s}
+.btn-fav:hover{border-color:#e74c3c;color:#e74c3c}
+.modal-divider{border:none;border-top:1px solid #2a2a2a;margin:1.2rem 0}
+.specs-title{font-family:var(–font-display);font-size:1.1rem;font-weight:800;text-transform:uppercase;margin-bottom:.8rem;color:var(–orange)}
+.specs-table{width:100%;border-collapse:collapse}
+.specs-table tr{border-bottom:1px solid #1e1e1e}
+.specs-table tr:last-child{border-bottom:none}
+.specs-table td{padding:.55rem .3rem;font-size:.85rem;vertical-align:top}
+.specs-table td:first-child{color:var(–gray);width:40%;padding-right:1rem}
+.specs-table td:last-child{color:var(–white);font-weight:500}
+.seller-box{background:var(–orange-dim);border:1px solid rgba(255,107,0,0.25);border-radius:8px;padding:.8rem 1rem;margin-top:1rem;font-size:.82rem;line-height:1.6}
+.seller-box b{color:var(–orange)}
+.ship-box{background:var(–dark2);border:1px solid #2a2a2a;border-radius:8px;padding:.8rem 1rem;margin-top:.8rem;font-size:.82rem;display:flex;flex-direction:column;gap:.4rem}
+.ship-row{display:flex;align-items:center;gap:.5rem}
+
+/* CONTACT */
+.contact-page{padding:3rem 2rem;max-width:1000px;margin:0 auto}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem}
+.contact-card{background:var(–dark2);border:1px solid #2a2a2a;border-radius:12px;padding:2rem;display:flex;flex-direction:column;gap:1rem}
+.contact-icon{font-size:2.5rem}
+.contact-title{font-family:var(–font-display);font-size:1.3rem;font-weight:800;text-transform:uppercase}
+.contact-val{color:var(–gray-light)}
+.btn-contact{margin-top:auto;display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:8px;font-family:var(–font-body);font-size:.9rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:opacity .2s}
+.btn-contact:hover{opacity:.88}
+.btn-wa{background:#25D366;color:white}
+.btn-mail{background:var(–orange);color:var(–black)}
+.btn-phone{background:var(–dark3);color:var(–white);border:1px solid #444!important}
+.contact-map{background:var(–dark2);border:1px solid #2a2a2a;border-radius:12px;height:260px;display:flex;align-items:center;justify-content:center;grid-column:1/-1;color:var(–gray);flex-direction:column;gap:.5rem}
+
+/* CART */
+.cart-sidebar{position:fixed;top:0;right:-420px;bottom:0;z-index:3000;width:420px;max-width:100vw;background:var(–dark);border-left:1px solid #2a2a2a;display:flex;flex-direction:column;transition:right .3s cubic-bezier(.4,0,.2,1)}
+.cart-sidebar.open{right:0}
+.cart-sidebar-overlay{position:fixed;inset:0;z-index:2999;background:rgba(0,0,0,.6);display:none}
+.cart-sidebar-overlay.open{display:block}
+.cart-head{padding:1.5rem;border-bottom:1px solid #1e1e1e;display:flex;align-items:center;justify-content:space-between}
+.cart-head h2{font-family:var(–font-display);font-size:1.4rem;font-weight:900;text-transform:uppercase}
+.cart-close-btn{background:var(–dark2);border:1px solid #333;color:var(–white);border-radius:6px;width:34px;height:34px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-close-btn:hover{border-color:var(–orange);color:var(–orange)}
+.cart-items{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem}
+.cart-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(–gray);text-align:center}
+.cart-empty span:first-child{font-size:4rem}
+.cart-item{background:var(–dark2);border:1px solid #2a2a2a;border-radius:8px;padding:.8rem;display:flex;gap:.8rem;align-items:center}
+.cart-item-img{width:54px;height:54px;background:var(–dark3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;overflow:hidden}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:.88rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-price{color:var(–orange);font-family:var(–font-display);font-size:1rem;font-weight:800}
+.cart-item-qty{display:flex;align-items:center;gap:.4rem;margin-top:.3rem}
+.cart-qty-btn{width:22px;height:22px;background:var(–dark3);border:1px solid #333;border-radius:4px;color:var(–white);font-size:.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cart-qty-btn:hover{border-color:var(–orange);color:var(–orange)}
+.cart-item-remove{background:none;border:none;color:var(–gray);font-size:1rem;cursor:pointer;flex-shrink:0;transition:color .2s}
+.cart-item-remove:hover{color:#e74c3c}
+.cart-footer{padding:1.2rem;border-top:1px solid #1e1e1e}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.cart-total-lbl{font-size:.9rem;color:var(–gray)}
+.cart-total-val{font-family:var(–font-display);font-size:1.8rem;font-weight:900;color:var(–orange)}
+.btn-checkout{width:100%;background:var(–orange);color:var(–black);border:none;border-radius:8px;padding:1rem;font-family:var(–font-display);font-size:1.2rem;font-weight:800;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.btn-checkout:hover{background:var(–orange-light)}
+.btn-checkout:disabled{background:#333;color:var(–gray);cursor:default}
+.cart-note{font-size:.75rem;color:var(–gray);text-align:center;margin-top:.6rem}
+
+/* SKELETON */
+.skeleton-card{background:var(–dark2);border-radius:10px;overflow:hidden}
+.skel-img{width:100%;aspect-ratio:1;background:linear-gradient(90deg,var(–dark2) 25%,var(–dark3) 50%,var(–dark2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-line{height:14px;background:linear-gradient(90deg,var(–dark2) 25%,var(–dark3) 50%,var(–dark2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin:1rem 1rem .5rem}
+.skel-line.short{width:55%;margin-bottom:1rem}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* EMPTY */
+.empty-state{grid-column:1/-1;text-align:center;padding:4rem 2rem;color:var(–gray)}
+.empty-state span{font-size:4rem;display:block;margin-bottom:1rem}
+
+/* FOOTER */
+footer{background:var(–dark);border-top:1px solid #1e1e1e;padding:3rem 2rem 1.5rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+.footer-logo{font-family:var(–font-display);font-size:1.6rem;font-weight:900;margin-bottom:.8rem}
+.footer-logo span{color:var(–orange)}
+.footer-desc{font-size:.85rem;color:var(–gray);line-height:1.6}
+.footer-title{font-family:var(–font-display);font-weight:800;font-size:1rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:1rem}
+.footer-links{display:flex;flex-direction:column;gap:.5rem}
+.footer-links a{color:var(–gray);font-size:.85rem;text-decoration:none;transition:color .2s;cursor:pointer}
+.footer-links a:hover{color:var(–orange)}
+.footer-bottom{border-top:1px solid #1e1e1e;padding-top:1.2rem;display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(–gray)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(–dark2);border:1px solid var(–orange);color:var(–white);border-radius:8px;padding:.8rem 1.2rem;font-size:.88rem;font-weight:500;display:flex;align-items:center;gap:.6rem;transform:translateY(100px);opacity:0;transition:transform .3s,opacity .3s;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-icon{color:var(–orange)}
+
+@media(max-width:768px){
+.modal-body{grid-template-columns:1fr}
+.modal-info{max-height:none}
+.footer-grid{grid-template-columns:1fr 1fr}
+.contact-grid{grid-template-columns:1fr}
+.hero-stats{display:none}
+.nav-links{display:none}
+}
+</style>
+
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-logo" onclick="showHome()">Pool<span>land</span></div>
+  <div class="nav-search">
+    <input type="text" placeholder="Ürün ara..." id="searchInput" oninput="handleSearch(this.value)">
+    <button>🔍</button>
+  </div>
+  <div class="nav-links">
+    <a onclick="showHome()">Ana Sayfa</a>
+    <a onclick="showSection('cat-all')">Ürünler</a>
+    <a onclick="showSection('iletisim')">İletişim</a>
+  </div>
+  <button class="nav-cart" onclick="toggleCart()">
+    🛒 Sepet <span class="cart-badge" id="cartBadge">0</span>
+  </button>
+</nav>
+
+<div class="page">
+
+  <section class="active" id="home">
+    <div class="hero">
+      <div class="hero-bg"></div><div class="hero-accent"></div>
+      <div class="hero-content">
+        <div class="hero-badge">🏗️ Kıbrıs'ın Güvenilir Yapı Marketi</div>
+        <h1>İnşaat<br><em>Malzeme</em><br>Mağazası</h1>
+        <p>Telden el arabasına, harç makinesinden tornavidaya — her şey tek çatı altında.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="showSection('cat-all')">Alışverişe Başla</button>
+          <button class="btn-secondary" onclick="showSection('iletisim')">Bize Ulaşın</button>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num" id="totalCount">...</div><div class="stat-lbl">Ürün</div></div>
+        <div class="stat"><div class="stat-num">24s</div><div class="stat-lbl">Teslimat</div></div>
+        <div class="stat"><div class="stat-num">12+</div><div class="stat-lbl">Yıl Deneyim</div></div>
+      </div>
+    </div>
+
+```
+<div class="sec-header">
+  <div class="sec-title">Kategori<span>ler</span></div>
+  <span class="sec-link" onclick="showSection('cat-all')">Tümünü gör →</span>
+</div>
+<div class="cats-grid" id="catsGrid">
+  <div style="padding:2rem;color:var(--gray);grid-column:1/-1">Yükleniyor...</div>
+</div>
+
+<div class="sec-header" style="margin-top:1rem">
+  <div class="sec-title">Öne Çıkan <span>Ürünler</span></div>
+  <span class="sec-link" onclick="showSection('cat-all')">Tümünü gör →</span>
+</div>
+<div class="products-grid" id="featuredGrid">
+  <div class="skeleton-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+  <div class="skeleton-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+  <div class="skeleton-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+  <div class="skeleton-card"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+</div>
+```
+
+  </section>
+
+  <section id="cat-all">
+    <div class="cat-header">
+      <button class="back-btn" onclick="showHome()">← Ana Sayfa</button>
+      <div style="font-family:var(--font-display);font-size:1.4rem;font-weight:900;text-transform:uppercase" id="catPageTitle">Tüm Ürünler</div>
+      <div style="font-size:.85rem;color:var(--gray);margin-left:auto" id="catPageCount"></div>
+    </div>
+    <div class="cat-filters" id="catFilters"></div>
+    <div class="products-grid" id="catProductsGrid"></div>
+  </section>
+
+  <section id="iletisim">
+    <div class="contact-page">
+      <div class="sec-title">İlet<span style="color:var(--orange)">işim</span></div>
+      <p style="color:var(--gray);margin-top:.5rem">Sorularınız için bize ulaşın.</p>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <span class="contact-icon">💬</span>
+          <div class="contact-title">WhatsApp</div>
+          <div class="contact-val">+90 (392) 000 00 00</div>
+          <p style="font-size:.82rem;color:var(--gray)">Sipariş ve stok sorguları için 7/24 WhatsApp'tan ulaşın.</p>
+          <a class="btn-contact btn-wa" href="https://wa.me/905000000000" target="_blank">💬 WhatsApp'tan Yaz</a>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📧</span>
+          <div class="contact-title">E-Posta</div>
+          <div class="contact-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1b72757d745b6b747477777a757f35787476356f69">[email&#160;protected]</a></div>
+          <p style="font-size:.82rem;color:var(--gray)">Toplu sipariş ve kurumsal talepler için.</p>
+          <a class="btn-contact btn-mail" href="/cdn-cgi/l/email-protection#a2cbccc4cde2d2cdcdcecec3ccc68cc1cdcf8cd6d0">✉️ E-Posta Gönder</a>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📞</span>
+          <div class="contact-title">Telefon</div>
+          <div class="contact-val">+90 (392) 000 00 01</div>
+          <p style="font-size:.82rem;color:var(--gray)">Hafta içi 09:00–18:00 müşteri hizmetleri.</p>
+          <a class="btn-contact btn-phone" href="tel:+903920000001">📞 Hemen Ara</a>
+        </div>
+        <div class="contact-card">
+          <span class="contact-icon">📍</span>
+          <div class="contact-title">Adres</div>
+          <div class="contact-val">Kıbrıs, KKTC</div>
+          <p style="font-size:.82rem;color:var(--gray)">Mağazamıza gelerek ürünleri yerinde inceleyin.</p>
+          <a class="btn-contact btn-phone" style="border:1px solid #444" href="#">🗺️ Yol Tarifi</a>
+        </div>
+        <div class="contact-map"><span style="font-size:3rem">🗺️</span><span>Poolland Yapı Market — Kıbrıs, KKTC</span></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- MODAL -->
+
+<div class="modal-overlay" id="modalOverlay" onclick="handleModalClick(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-body">
+      <div class="modal-gallery">
+        <div class="modal-main-img" id="modalMainImg">📦</div>
+        <div class="modal-thumbs" id="modalThumbs"></div>
+      </div>
+      <div class="modal-info" id="modalInfo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CART -->
+
+<div class="cart-sidebar-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-head">
+    <h2>🛒 Sepetim</h2>
+    <button class="cart-close-btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter"></div>
+</div>
+
+<div class="toast" id="toast"><span class="toast-icon">✅</span><span id="toastMsg"></span></div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Pool<span>land</span></div>
+      <div class="footer-desc">Kıbrıs'ın en güvenilir yapı marketi. A'dan Z'ye inşaat malzemeleri.</div>
+    </div>
+    <div>
+      <div class="footer-title">Kategoriler</div>
+      <div class="footer-links" id="footerCats"></div>
+    </div>
+    <div>
+      <div class="footer-title">Kurumsal</div>
+      <div class="footer-links">
+        <a>Hakkımızda</a><a>Gizlilik Politikası</a><a>İade & Değişim</a><a>Kargo Bilgisi</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-title">İletişim</div>
+      <div class="footer-links">
+        <a href="https://wa.me/905000000000" target="_blank">💬 WhatsApp</a>
+        <a href="/cdn-cgi/l/email-protection#afc6c1c9c0efdfc0c0c3c3cec1cb81ccc0c281dbdd">📧 E-Posta</a>
+        <a href="tel:+903920000001">📞 Telefon</a>
+        <a onclick="showSection('iletisim')">📍 Konum</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Poolland Yapı Market. Tüm hakları saklıdır.</span>
+    <span>💳 Güvenli Ödeme · 🚚 Hızlı Kargo · 🔄 Kolay İade</span>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+// ═══════════════ SUPABASE ═══════════════
+const SB_URL = ‘https://lysssccessiccdjzcfei.supabase.co’;
+const SB_KEY = ‘sb_publishable_-SHZzgmkPY34Xn2o1VZV5A_Z9rvMH1k’;
+
+async function sbGet(path) {
+const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
+headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+});
+if (!r.ok) throw new Error(await r.text());
+return r.json();
+}
+
+// ═══════════════ STATE ═══════════════
+let products = [], categories = [], cart = {}, currentQty = 1, activeCat = ‘all’;
+
+// ═══════════════ INIT ═══════════════
+async function init() {
+try {
+[categories, products] = await Promise.all([
+sbGet(‘categories?select=*&order=name’),
+sbGet(’products?select=*,categories(name,icon)&order=created_at.desc’)
+]);
+} catch(e) {
+console.warn(‘Supabase bağlantısı yok, demo mod:’, e.message);
+useDemoData();
+}
+document.getElementById(‘totalCount’).textContent = products.length || ‘2500+’;
+render();
+}
+
+function useDemoData() {
+categories = [
+{id:‘c1’,name:‘El Aletleri’,icon:‘🔧’,slug:‘el-aletleri’},
+{id:‘c2’,name:‘Elektrikli Aletler’,icon:‘⚡’,slug:‘elektrikli’},
+{id:‘c3’,name:‘Harç & Beton’,icon:‘🏗️’,slug:‘harc’},
+{id:‘c4’,name:‘Taşıma Ekipmanları’,icon:‘🛒’,slug:‘tasima’},
+{id:‘c5’,name:‘Bağlantı Elemanları’,icon:‘🔩’,slug:‘baglanti’},
+{id:‘c6’,name:‘Boya & Badana’,icon:‘🎨’,slug:‘boya’},
+{id:‘c7’,name:‘İş Güvenliği’,icon:‘⛑️’,slug:‘guvenlik’},
+{id:‘c8’,name:‘Ölçüm Aletleri’,icon:‘📏’,slug:‘olcum’},
+];
+products = [
+{id:‘p1’,name:‘Tornavida Set 12 Parça’,brand:‘PATEX’,emoji:‘🪛’,price:149,old_price:219,stock_status:‘in’,stock_count:100,short_desc:‘5x100 düz+yıldız uçlu profesyonel set’,badge:‘İndirim’,featured:true,specs:{Tip:‘Düz+Yıldız’,‘Parça Sayısı’:‘12’,Menşei:‘TR’,Malzeme:‘Krom Vanadyum’},long_desc:‘Dayanıklı malzemeden üretilmiş, ergonomik saplı tornavida seti. Evde, işte veya atölyede çeşitli görevler için idealdir.’,seller_info:‘Bu ürün PATEX KİMYA tarafından gönderilecektir. 100+ stok mevcuttur.’,categories:{name:‘El Aletleri’,icon:‘🔧’}},
+{id:‘p2’,name:‘Çekiç 500gr Fiber Sap’,brand:‘STANLEY’,emoji:‘🔨’,price:285,old_price:null,stock_status:‘in’,stock_count:50,short_desc:‘Profesyonel çelik başlı fiber saplı çekiç’,badge:null,featured:true,specs:{Ağırlık:‘500 gr’,Boy:‘33 cm’,‘Sap Tipi’:‘Fiber Cam’,Menşei:‘USA’},long_desc:‘Stanley profesyonel serisi. Fiber sap titreşimi emer, dövme çelik baş uzun ömürlüdür.’,seller_info:‘Bu ürün Poolland Yapı Market tarafından gönderilecektir.’,categories:{name:‘El Aletleri’,icon:‘🔧’}},
+{id:‘p3’,name:‘Harç Makinesi 140L’,brand:‘IMER’,emoji:‘⚙️’,price:8750,old_price:9500,stock_status:‘low’,stock_count:3,short_desc:‘140 litre kapasiteli elektrikli harç mikseri’,badge:‘Son Stok’,featured:true,specs:{Kapasite:‘140 Litre’,Güç:‘1.100 W’,Voltaj:‘220V’,Ağırlık:‘62 kg’,Garanti:‘2 Yıl’},long_desc:‘IMER 140L, büyük inşaat projelerinde yüksek verimlilik sağlar. 1100W güçlü motoru ile yoğun karışımları kolaylıkla işler.’,seller_info:‘Bu ürün Poolland Yapı Market tarafından gönderilecektir.’,categories:{name:‘Harç & Beton’,icon:‘🏗️’}},
+{id:‘p4’,name:‘Galvaniz El Arabası 100L’,brand:‘POOLLAND’,emoji:‘🛒’,price:1250,old_price:1450,stock_status:‘in’,stock_count:25,short_desc:‘Havalı lastikli galvaniz kovalı el arabası’,badge:‘İndirim’,featured:true,specs:{Kapasite:‘100 Litre’,Lastik:‘Havalı 4.00-6’,Kapasite2:‘150 kg yük’,Menşei:‘TR’},long_desc:‘Havalı lastikli el arabası zorlu arazilerde rahatlıkla kullanılır. Galvaniz kova paslanmaz ve uzun ömürlüdür.’,seller_info:‘Bu ürün Poolland Yapı Market tarafından gönderilecektir.’,categories:{name:‘Taşıma Ekipmanları’,icon:‘🛒’}},
+{id:‘p5’,name:‘Darbeli Matkap GSB 13 RE’,brand:‘BOSCH’,emoji:‘🔌’,price:2890,old_price:3200,stock_status:‘in’,stock_count:15,short_desc:‘600W darbeli matkap, 13mm çene, çanta dahil’,badge:‘İndirim’,featured:true,specs:{Güç:‘600 W’,Çene:‘13 mm’,Devir:‘0-2800 d/dk’,Ağırlık:‘1.9 kg’,Garanti:‘2 Yıl’},long_desc:‘Bosch GSB 13 RE, konut ve endüstriyel uygulamalar için güçlü ve güvenilir darbeli matkap.’,seller_info:‘Bu ürün Bosch Türkiye tarafından gönderilecektir.’,categories:{name:‘Elektrikli Aletler’,icon:‘⚡’}},
+{id:‘p6’,name:‘Lazer Metre DISTO D2’,brand:‘LEICA’,emoji:‘📐’,price:3450,old_price:3800,stock_status:‘in’,stock_count:10,short_desc:‘60m menzilli ±1.5mm hassasiyetli lazer metre’,badge:‘İndirim’,featured:false,specs:{Menzil:‘60 m’,Hassasiyet:‘±1.5 mm’,IP:‘IP54’,Menşei:‘İsviçre’},long_desc:‘Leica DISTO D2, hem profesyoneller hem ustabaşılar için mükemmel lazer metre.’,seller_info:‘Bu ürün Leica Geosystems yetkili bayii tarafından gönderilecektir.’,categories:{name:‘Ölçüm Aletleri’,icon:‘📏’}},
+{id:‘p7’,name:‘FFP2 Toz Maskesi 20li’,brand:‘3M’,emoji:‘😷’,price:185,old_price:null,stock_status:‘in’,stock_count:500,short_desc:‘CE onaylı FFP2 solunum koruyucu, valfsiz’,badge:null,featured:true,specs:{Sınıf:‘FFP2 EN149’,Adet:‘20 adet/kutu’,Sertifika:‘CE+TSE’,Filtrasyon:’%94’},long_desc:‘3M FFP2 maskeler ince toz, sis ve aerosollere karşı yüksek koruma sağlar.’,seller_info:‘Bu ürün 3M Türkiye distribütöründen gönderilecektir.’,categories:{name:‘İş Güvenliği’,icon:‘⛑️’}},
+{id:‘p8’,name:‘Cıvata Seti 500 Parça’,brand:‘FISCHER’,emoji:‘🔩’,price:320,old_price:null,stock_status:‘in’,stock_count:200,short_desc:‘M3-M8 arası paslanmaz çelik cıvata seti’,badge:‘Yeni’,featured:false,specs:{Adet:‘500 Parça’,Malzeme:‘A2 Paslanmaz’,Boyutlar:‘M3-M8’,Kutu:‘Dahil’},long_desc:‘Nem ve korozyona dayanıklı A2 kalite paslanmaz çelik. Plastik muhafaza kutusu ile düzenli saklama.’,seller_info:‘Bu ürün FISCHER Türkiye tarafından gönderilecektir.’,categories:{name:‘Bağlantı Elemanları’,icon:‘🔩’}},
+{id:‘p9’,name:‘Dış Cephe Boyası 15L’,brand:‘FİLLİ BOYA’,emoji:‘🪣’,price:890,old_price:1050,stock_status:‘low’,stock_count:8,short_desc:‘Su bazlı UV dayanımlı dış cephe boyası’,badge:‘Son Stok’,featured:false,specs:{Hacim:‘15 Litre’,Renk:‘Beyaz’,Baz:‘Su Bazlı’,Kuruma:‘2 Saat’},long_desc:‘Filli Boya dış cephe serisi zorlu hava koşullarına karşı üstün koruma sağlar.’,seller_info:‘Bu ürün Filli Boya yetkili bayii tarafından gönderilecektir.’,categories:{name:‘Boya & Badana’,icon:‘🎨’}},
+{id:‘p10’,name:‘Daire Testere DWE575’,brand:‘DEWALT’,emoji:‘🪚’,price:4200,old_price:4800,stock_status:‘out’,stock_count:0,short_desc:‘1600W güçlü 190mm daire testere’,badge:null,featured:false,specs:{Güç:‘1600 W’,Bıçak:‘190 mm’,Devir:‘5800 d/dk’,Ağırlık:‘4.2 kg’},long_desc:‘DEWALT DWE575 profesyonel ağır hizmet daire testeresi.’,seller_info:‘Bu ürün DEWALT yetkili bayii tarafından gönderilecektir.’,categories:{name:‘Elektrikli Aletler’,icon:‘⚡’}},
+{id:‘p11’,name:‘Seramik Yapıştırıcı 25kg’,brand:‘MAPEI’,emoji:‘🧴’,price:340,old_price:390,stock_status:‘in’,stock_count:80,short_desc:‘C2TE sınıfı geniş formatlı yapıştırıcı’,badge:‘İndirim’,featured:true,specs:{Ağırlık:‘25 kg’,Sınıf:‘C2TE’,Kaplama:‘3-4 m²’,Menşei:‘İtalya’},long_desc:‘Mapei Keraflex Extra S1, geniş formatlı karo döşemede kullanılan esnek yapıştırıcı.’,seller_info:‘Bu ürün Mapei Türkiye distribütöründen gönderilecektir.’,categories:{name:‘Boya & Badana’,icon:‘🎨’}},
+{id:‘p12’,name:‘PPR Boru 20mm 3m (10lu)’,brand:‘WAVIN’,emoji:‘🔧’,price:420,old_price:null,stock_status:‘in’,stock_count:200,short_desc:‘PN20 sıcak su PPR boru, 10 adet’,badge:null,featured:false,specs:{Çap:‘20 mm’,Boy:‘3 m’,Sınıf:‘PN20’,‘Maks. Sıcaklık’:‘95°C’},long_desc:‘Wavin PPR borular iç mekan sıcak/soğuk su tesisatı için güvenilir çözüm.’,seller_info:‘Bu ürün Wavin Türkiye distribütöründen gönderilecektir.’,categories:{name:‘El Aletleri’,icon:‘🔧’}},
+];
+}
+
+function render() {
+renderCategories();
+renderFeatured();
+renderFooterCats();
+renderCatFilters(‘all’);
+renderCatProducts(products);
+updateCartUI();
+}
+
+// ═══════════════ HELPERS ═══════════════
+function stockLabel(p) {
+if (p.stock_status === ‘out’) return ‘Stok yok’;
+if (p.stock_status === ‘low’) return `Az stok (${p.stock_count} adet)`;
+return `Stokta var${p.stock_count > 0 ? ' ('+p.stock_count+'+)' : ''}`;
+}
+
+function imgHTML(p, size) {
+const fs = size === ‘lg’ ? ‘8rem’ : size === ‘sm’ ? ‘1.8rem’ : ‘4rem’;
+if (p.image_url) return `<img src="${p.image_url}" alt="${p.name}" onerror="this.style.display='none'"><span style="display:none;font-size:${fs}">${p.emoji||'📦'}</span>`;
+return `<span style="font-size:${fs};user-select:none">${p.emoji||'📦'}</span>`;
+}
+
+// ═══════════════ RENDER ═══════════════
+function renderCategories() {
+document.getElementById(‘catsGrid’).innerHTML = categories.map(c => ` <div class="cat-card" onclick="filterCat('${c.name}')"> <span class="cat-icon">${c.icon||'📦'}</span> <div class="cat-name">${c.name}</div> <div class="cat-count">${products.filter(p=>p.categories?.name===c.name).length} ürün</div> </div>`).join(’’);
+}
+
+function renderFooterCats() {
+document.getElementById(‘footerCats’).innerHTML = categories.slice(0,5).map(c=>
+`<a onclick="filterCat('${c.name}')">${c.icon} ${c.name}</a>`).join(’’);
+}
+
+function cardHTML(p) {
+const dot = p.stock_status===‘in’?‘stock-in’:p.stock_status===‘low’?‘stock-low’:‘stock-out’;
+const bc = p.badge===‘Son Stok’?‘badge-low’:p.badge===‘Yeni’?‘badge-new’:’’;
+return `<div class="product-card" onclick="openModal('${p.id}')"> <div class="product-img">${imgHTML(p)}<div class="product-img-overlay"></div>${p.badge?`<span class="product-badge ${bc}">${p.badge}</span>`:''}</div> <div class="product-info"> <div class="product-brand">${p.brand}</div> <div class="product-name">${p.name}</div> <div class="product-specs">${p.short_desc||''}</div> <div class="stock-indicator"><div class="stock-dot ${dot}"></div><span style="color:var(--gray)">${stockLabel(p)}</span></div> <div class="product-bottom"> <div>${p.old_price?`<div class="product-old-price">${Number(p.old_price).toLocaleString(‘tr-TR’)} ₺</div>`:’’}<div class="product-price">${Number(p.price).toLocaleString(‘tr-TR’)} ₺</div></div>
+<button class="btn-add" onclick="addToCart(event,'${p.id}')">+</button>
+</div>
+</div>
+
+  </div>`;
+}
+
+function renderFeatured() {
+const f = products.filter(p=>p.featured);
+document.getElementById(‘featuredGrid’).innerHTML = f.length ? f.map(cardHTML).join(’’) :
+‘<div class="empty-state"><span>📦</span><p>Öne çıkan ürün bulunamadı.</p></div>’;
+}
+
+function renderCatProducts(list) {
+document.getElementById(‘catPageCount’).textContent = `${list.length} ürün`;
+document.getElementById(‘catProductsGrid’).innerHTML = list.length ? list.map(cardHTML).join(’’) :
+‘<div class="empty-state"><span>🔍</span><p>Ürün bulunamadı.</p></div>’;
+}
+
+function renderCatFilters(active) {
+const cats = [‘Tümü’, …new Set(products.map(p=>p.categories?.name).filter(Boolean))];
+document.getElementById(‘catFilters’).innerHTML = cats.map(c=>` <button class="filter-btn ${(active==='all'&&c==='Tümü')||active===c?'active':''}" onclick="applyCatFilter('${c==='Tümü'?'all':c}')">${c}</button>`).join(’’);
+}
+
+function applyCatFilter(cat) {
+activeCat = cat;
+renderCatFilters(cat);
+renderCatProducts(cat===‘all’?products:products.filter(p=>p.categories?.name===cat));
+document.getElementById(‘catPageTitle’).textContent = cat===‘all’?‘Tüm Ürünler’:cat;
+}
+
+// ═══════════════ NAV ═══════════════
+function showHome() {
+document.querySelectorAll(‘section’).forEach(s=>s.classList.remove(‘active’));
+document.getElementById(‘home’).classList.add(‘active’);
+window.scrollTo({top:0,behavior:‘smooth’});
+}
+function showSection(id) {
+document.querySelectorAll(‘section’).forEach(s=>s.classList.remove(‘active’));
+document.getElementById(id).classList.add(‘active’);
+if(id===‘cat-all’) applyCatFilter(activeCat);
+window.scrollTo({top:0,behavior:‘smooth’});
+}
+function filterCat(name) { activeCat=name; showSection(‘cat-all’); }
+
+// ═══════════════ SEARCH ═══════════════
+function handleSearch(v) {
+if(!v.trim())return;
+const q=v.toLowerCase();
+const r=products.filter(p=>p.name.toLowerCase().includes(q)||p.brand.toLowerCase().includes(q)||(p.categories?.name||’’).toLowerCase().includes(q));
+showSection(‘cat-all’);
+document.getElementById(‘catPageTitle’).textContent=`"${v}" için sonuçlar`;
+activeCat=‘all’; renderCatFilters(‘all’); renderCatProducts(r);
+}
+
+// ═══════════════ MODAL ═══════════════
+function openModal(id) {
+const p = products.find(x=>String(x.id)===String(id));
+if(!p) return;
+currentQty = 1;
+
+const mi = document.getElementById(‘modalMainImg’);
+mi.innerHTML = p.image_url
+? `<img src="${p.image_url}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover">`
+: `<span style="font-size:8rem;user-select:none">${p.emoji||'📦'}</span>`;
+
+document.getElementById(‘modalThumbs’).innerHTML = [1,2,3].map((_,i)=>
+`<div class="modal-thumb ${i===0?'active':''}" onclick="selThumb(this)">${p.emoji||'📦'}</div>`).join(’’);
+
+const dot = p.stock_status===‘in’?‘stock-in’:p.stock_status===‘low’?‘stock-low’:‘stock-out’;
+const col = p.stock_status===‘in’?’#27ae60’:p.stock_status===‘low’?’#e67e22’:’#e74c3c’;
+const canBuy = p.stock_status!==‘out’;
+const disc = p.old_price ? Math.round((1-p.price/p.old_price)*100) : 0;
+const specs = p.specs||{};
+const rows = Object.entries(specs).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join(’’);
+
+document.getElementById(‘modalInfo’).innerHTML = ` <div class="modal-brand">${p.brand} · ${p.categories?.name||''}</div> <div class="modal-name">${p.name}</div> <div class="modal-price-row"> <div> ${p.old_price?`<div class="modal-old-price">${Number(p.old_price).toLocaleString(‘tr-TR’)} ₺</div>`:''} <div class="modal-price">${Number(p.price).toLocaleString('tr-TR')} ₺</div> </div> ${disc>0?`<div class="modal-discount">%${disc} İndirim</div>`:''} </div> <div class="modal-stock"><div class="stock-dot ${dot}"></div><span style="color:${col};font-weight:600">${stockLabel(p)}</span></div> <p style="font-size:.88rem;color:var(--gray-light);line-height:1.7;margin-bottom:1.2rem">${p.long_desc||p.short_desc||''}</p> ${canBuy?`
+<div class="qty-row">
+<span class="qty-label">Adet:</span>
+<div class="qty-ctrl">
+<button class="qty-btn" onclick="chQty(-1)">−</button>
+<span class="qty-val" id="mqty">1</span>
+<button class="qty-btn" onclick="chQty(1)">+</button>
+</div>
+</div>
+<div class="modal-actions">
+<button class="btn-cart-full" onclick="addToCart(null,'${p.id}',true)">🛒 Sepete Ekle</button>
+<button class="btn-fav">♡</button>
+</div>` :`<div style="background:#1a1a1a;border:1px solid #e74c3c;border-radius:8px;padding:1rem;color:#e74c3c;font-weight:600;text-align:center;margin-bottom:1rem">❌ Bu ürün şu an stokta yok</div>`} <hr class="modal-divider"> ${rows?`<div class="specs-title">Ürün Özellikleri</div><table class="specs-table">${rows}</table><hr class="modal-divider">`:''} <div class="seller-box"><b>Satıcı Bilgisi:</b><br>${p.seller_info||'Poolland Yapı Market'}</div> <div class="ship-box"> <div class="ship-row"><span>🚚</span><span>Aynı gün kargo (14:00'a kadar siparişlerde)</span></div> <div class="ship-row"><span>🔄</span><span>15 gün ücretsiz iade garantisi</span></div> <div class="ship-row"><span>💳</span><span>Güvenli ödeme — Shopify Payments</span></div> </div>`;
+
+document.getElementById(‘modalOverlay’).classList.add(‘open’);
+document.body.style.overflow=‘hidden’;
+}
+
+function closeModal() { document.getElementById(‘modalOverlay’).classList.remove(‘open’); document.body.style.overflow=’’; }
+function handleModalClick(e) { if(e.target===document.getElementById(‘modalOverlay’)) closeModal(); }
+function selThumb(el) { document.querySelectorAll(’.modal-thumb’).forEach(t=>t.classList.remove(‘active’)); el.classList.add(‘active’); }
+function chQty(d) { currentQty=Math.max(1,currentQty+d); const e=document.getElementById(‘mqty’); if(e)e.textContent=currentQty; }
+
+// ═══════════════ CART ═══════════════
+function addToCart(e, id, fromModal) {
+if(e) e.stopPropagation();
+const p = products.find(x=>String(x.id)===String(id));
+if(!p||p.stock_status===‘out’) return;
+const qty = fromModal ? currentQty : 1;
+const k = String(p.id);
+cart[k] ? cart[k].qty+=qty : (cart[k]={…p,qty});
+updateCartUI();
+toast(`${p.name} sepete eklendi ✓`);
+if(fromModal) closeModal();
+}
+
+function removeFromCart(k) { delete cart[k]; updateCartUI(); }
+function chCartQty(k, d) { if(!cart[k])return; cart[k].qty=Math.max(1,cart[k].qty+d); updateCartUI(); }
+
+function updateCartUI() {
+const items = Object.values(cart);
+const total = items.reduce((s,i)=>s+Number(i.price)*i.qty,0);
+const count = items.reduce((s,i)=>s+i.qty,0);
+document.getElementById(‘cartBadge’).textContent = count;
+
+const ie = document.getElementById(‘cartItems’);
+const fe = document.getElementById(‘cartFooter’);
+
+if(!items.length) {
+ie.innerHTML = `<div class="cart-empty"><span>🛒</span><span>Sepetiniz boş</span><span style="font-size:.82rem">Ürün ekleyerek başlayın</span></div>`;
+fe.innerHTML = `<div class="cart-total-row"><span class="cart-total-lbl">Toplam</span><span class="cart-total-val">0 ₺</span></div><button class="btn-checkout" disabled>Ödemeye Geç</button>`;
+return;
+}
+
+ie.innerHTML = items.map(i=>{
+const k=String(i.id);
+return `<div class="cart-item"> <div class="cart-item-img">${i.image_url?`<img src="${i.image_url}" alt="${i.name}">`:(i.emoji||'📦')}</div> <div class="cart-item-info"> <div class="cart-item-name">${i.name}</div> <div class="cart-item-price">${(Number(i.price)*i.qty).toLocaleString('tr-TR')} ₺</div> <div class="cart-item-qty"> <button class="cart-qty-btn" onclick="chCartQty('${k}',-1)">−</button> <span style="font-size:.82rem;min-width:20px;text-align:center">${i.qty}</span> <button class="cart-qty-btn" onclick="chCartQty('${k}',1)">+</button> <span style="font-size:.75rem;color:var(--gray);margin-left:.4rem">${Number(i.price).toLocaleString('tr-TR')} ₺/adet</span> </div> </div> <button class="cart-item-remove" onclick="removeFromCart('${k}')">🗑️</button> </div>`;
+}).join(’’);
+
+fe.innerHTML = ` <div class="cart-total-row"> <span class="cart-total-lbl">Toplam (${count} ürün)</span> <span class="cart-total-val">${total.toLocaleString('tr-TR')} ₺</span> </div> <button class="btn-checkout" onclick="checkout()">💳 Ödemeye Geç</button> <div class="cart-note">Shopify güvenli ödeme altyapısı</div>`;
+}
+
+function toggleCart() {
+document.getElementById(‘cartSidebar’).classList.toggle(‘open’);
+document.getElementById(‘cartOverlay’).classList.toggle(‘open’);
+}
+
+function checkout() {
+toast(‘Shopify ödeme sayfasına yönlendiriliyor…’);
+setTimeout(()=>alert(‘🔗 Shopify entegrasyonu Aşama 3'te eklenecek!\nŞimdilik WhatsApp'tan sipariş verebilirsiniz.’),600);
+}
+
+// ═══════════════ TOAST ═══════════════
+let tt;
+function toast(msg) {
+const el=document.getE
