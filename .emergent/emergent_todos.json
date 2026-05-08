@@ -1,0 +1,50 @@
+[
+  {
+    "content": "Get design guidelines from design_agent",
+    "status": "completed"
+  },
+  {
+    "content": "Install all premium dependencies",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Backend - Contact form endpoint + MongoDB",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Frontend - Core infrastructure",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Cinematic intro/loader with stone logo reveal",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Hero section with 3D equipment scene",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: 6 services with unique layouts + 3 dedicated 3D scenes",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Gallery (masonry + lightbox + before/after)",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: About + Contact + Footer sections",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: Mobile adaptive quality + performance optimization",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: End-to-end testing with testing_agent_v3 (30/30 passed, 100%)",
+    "status": "completed"
+  },
+  {
+    "content": "Phase 2: User stories verified and all bugs fixed",
+    "status": "completed"
+  }
+]
